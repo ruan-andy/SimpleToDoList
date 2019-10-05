@@ -4,7 +4,7 @@ SimpleToDoList is an android app that allows building a todo list and basic todo
 
 Submitted by: Andy Ruan
 
-Time spent: 5 hours spent in total
+Time spent: 8 hours spent in total
 
 ## User Stories
 
@@ -23,6 +23,8 @@ Here's a walkthrough of implemented user stories:
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
+
+There were some designs I wanted to impletement but it was not working the way I expected. 
 
 ## License
 
