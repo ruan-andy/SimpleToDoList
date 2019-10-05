@@ -2,6 +2,8 @@ package com.example.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,21 +16,24 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SHARED_PREFS_NAME = "MY_SHARED_PREF";
     private EditText item;
     private Button button;
     private ListView itemList;
 
-    private ArrayList<String> items;
+    private ArrayList<String> items = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        items = new ArrayList<String>();
+        items = getList();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         item = findViewById(R.id.item_edit_text);
         button = findViewById(R.id.add_btn);
@@ -60,6 +65,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private ArrayList<String> getList() {
+        SharedPreferences sp = this.getSharedPreferences(SHARED_PREFS_NAME, Activity.MODE_PRIVATE);
+
+        //NOTE: if shared preference is null, the method return empty Hashset and not null
+        Set<String> set = sp.getStringSet("list", new HashSet<String>());
+
+        return new ArrayList<String>(set);
+    }
+
+    public boolean saveList() {
+        SharedPreferences sp = this.getSharedPreferences(SHARED_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor mEdit1 = sp.edit();
+        Set<String> set = new HashSet<String>();
+        set.addAll(items);
+        mEdit1.putStringSet("list", set);
+        return mEdit1.commit();
+    }
+
+    public void onStop() {
+        saveList();
+        super.onStop();
     }
 
 }
